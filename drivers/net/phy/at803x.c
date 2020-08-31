@@ -73,6 +73,7 @@ MODULE_LICENSE("GPL");
 
 struct at803x_priv {
 	bool phy_reset:1;
+	struct gpio_desc *reset_gpio;
 };
 
 struct at803x_context {
@@ -250,13 +251,56 @@ static int at803x_probe(struct phy_device *phydev)
 		return -ENOMEM;
 
 	phydev->priv = priv;
-
+	
+/*
+	 priv->reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_LOW);
+    if (IS_ERR(priv->reset_gpio)) {
+                      dev_err(dev, "cannot get reset-gpio\n");
+                      return PTR_ERR(priv->reset_gpio);
+    }
+	printk("at8035----------------->\n");
+    gpiod_set_value_cansleep(priv->reset_gpio, 0);
+    msleep(10);
+    gpiod_set_value_cansleep(priv->reset_gpio, 1);
+    msleep(20);
+*/
+	msleep(20);
 	return 0;
 }
 
 static int at803x_config_init(struct phy_device *phydev)
 {
 	int ret;
+
+
+	/*----------------------------------------------*/
+        /* Ar803x phy SmartEEE feature cause link status generates glitch,
+         * which cause ethernet link down/up issue, so disable SmartEEE
+         */
+	/*
+        phy_write(phydev, 0xd, 0x3);
+        phy_write(phydev, 0xe, 0x805d);
+        phy_write(phydev, 0xd, 0x4003);
+
+        val = phy_read(phydev, 0xe);
+        phy_write(phydev, 0xe, val & ~(1 << 8));
+	
+	phy_write(phydev, 0xd, 0x7);
+        phy_write(phydev, 0xe, 0x8016);
+        phy_write(phydev, 0xd, 0x4007);
+
+        val = phy_read(phydev, 0xe);
+        val &= 0xffe3;
+        val |= 0x18;
+        phy_write(phydev, 0xe, val);
+
+        phy_write(phydev, 0x1d, 0x5);
+        val = phy_read(phydev, 0x1e);
+        val |= 0x0100;
+        phy_write(phydev, 0x1e, val);
+
+printk("test ar8035 !!!");
+*/
 
 	/* The RX and TX delay default is:
 	 *   after HW reset: RX delay enabled and TX delay disabled

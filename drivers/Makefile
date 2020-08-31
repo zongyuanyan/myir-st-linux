@@ -53,7 +53,7 @@ obj-$(CONFIG_RESET_CONTROLLER)	+= reset/
 # tty/ comes before char/ so that the VT console is the boot-time
 # default.
 obj-y				+= tty/
-obj-y				+= char/
+#obj-y				+= char/
 
 # iommu/ comes before gpu as gpu are using iommu controllers
 obj-y				+= iommu/
@@ -69,7 +69,7 @@ obj-$(CONFIG_FB_INTEL)          += video/fbdev/intelfb/
 
 obj-$(CONFIG_PARPORT)		+= parport/
 obj-$(CONFIG_NVM)		+= lightnvm/
-obj-y				+= base/ block/ misc/ mfd/ nfc/
+obj-y				+= base/ block/ mfd/ nfc/
 obj-$(CONFIG_LIBNVDIMM)		+= nvdimm/
 obj-$(CONFIG_DAX)		+= dax/
 obj-$(CONFIG_DMA_SHARED_BUFFER) += dma-buf/
@@ -85,7 +85,6 @@ obj-$(CONFIG_SPI)		+= spi/
 obj-$(CONFIG_SPMI)		+= spmi/
 obj-$(CONFIG_HSI)		+= hsi/
 obj-$(CONFIG_SLIMBUS)		+= slimbus/
-obj-y				+= net/
 obj-$(CONFIG_ATM)		+= atm/
 obj-$(CONFIG_FUSION)		+= message/
 obj-y				+= firewire/
@@ -186,3 +185,6 @@ obj-$(CONFIG_SIOX)		+= siox/
 obj-$(CONFIG_GNSS)		+= gnss/
 obj-$(CONFIG_INTERCONNECT)	+= interconnect/
 obj-$(CONFIG_COUNTER)		+= counter/
+obj-y                           += char/
+obj-y 				+= misc/
+obj-y                           += net/

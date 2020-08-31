@@ -26,8 +26,8 @@ int dwmac4_dma_reset(void __iomem *ioaddr)
 		mdelay(10);
 	}
 
-	if (limit < 0)
-		return -EBUSY;
+	//if (limit < 0)
+	//	return -EBUSY;
 
 	return 0;
 }
