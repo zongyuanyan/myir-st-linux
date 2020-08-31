@@ -1007,7 +1007,10 @@ dtb-$(CONFIG_ARCH_STM32) += \
 	stm32mp157c-ev1-a7-examples.dtb \
 	stm32mp157c-ev1-m4-examples.dtb \
 	stm32mp157f-ev1-a7-examples.dtb \
-	stm32mp157f-ev1-m4-examples.dtb
+	stm32mp157f-ev1-m4-examples.dtb \
+	stm32mp157c-ya157c-v2.dtb \
+	stm32mp157c-ya157c-hdmi-v2.dtb \
+	stm32mp157c-ya157c-lcd-v2.dtb
 
 dtb-$(CONFIG_MACH_SUN4I) += \
 	sun4i-a10-a1000.dtb \
