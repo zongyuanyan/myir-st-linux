@@ -4344,7 +4344,8 @@ CONFIG_USB_ISP1760_DUAL_ROLE=y
 #
 # USB port drivers
 #
-# CONFIG_USB_SERIAL is not set
+CONFIG_USB_SERIAL=y
+CONFIG_USB_SERIAL_OPTION=y
 
 #
 # USB Miscellaneous drivers
