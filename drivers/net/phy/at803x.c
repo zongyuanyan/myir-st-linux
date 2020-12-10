@@ -252,7 +252,7 @@ static int at803x_probe(struct phy_device *phydev)
 
 	phydev->priv = priv;
 	
-/*
+
 	 priv->reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_LOW);
     if (IS_ERR(priv->reset_gpio)) {
                       dev_err(dev, "cannot get reset-gpio\n");
@@ -263,7 +263,7 @@ static int at803x_probe(struct phy_device *phydev)
     msleep(10);
     gpiod_set_value_cansleep(priv->reset_gpio, 1);
     msleep(20);
-*/
+
 	msleep(20);
 	return 0;
 }
