@@ -7,7 +7,7 @@
 
 /dts-v1/;
 
-#include "stm32mp15xc-ya151c-t.dts"
+#include "stm32mp15xc-ya15xc-t.dts"
 
 / {
     model = "MYIR YA15XC-HDMI-T www.myir-tech.com";
