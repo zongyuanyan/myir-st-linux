@@ -7,7 +7,7 @@
 
 /dts-v1/;
 
-#include "stm32mp15xc-ya15xc-t.dts"
+#include "stm32mp15xc-ya157c-t.dts"
 
 / {
     	 model = "MYIR YA15XC-T www.myir-tech.com";

@@ -11,5 +11,5 @@ mkdir -p $PWD/../build/install_artifact/boot/
 cp $PWD/../build/arch/arm/boot/uImage $PWD/../build/install_artifact/boot/
 cp $PWD/../build/arch/arm/boot/dts/stm32mp157c-ya157c*.dtb $PWD/../build/install_artifact/boot/
 
-#cp $PWD/../build/arch/arm/boot/dts/stm32mp151c-ya151c*.dtb $PWD/../build/install_artifact/boot/
-#cp $PWD/../build/arch/arm/boot/dts/stm32mp153c-ya153c*.dtb $PWD/../build/install_artifact/boot/
+cp $PWD/../build/arch/arm/boot/dts/stm32mp15xc-ya151c*.dtb $PWD/../build/install_artifact/boot/
+cp $PWD/../build/arch/arm/boot/dts/stm32mp15xc-ya157c*.dtb $PWD/../build/install_artifact/boot/

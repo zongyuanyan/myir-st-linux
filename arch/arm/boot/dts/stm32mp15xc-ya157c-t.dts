@@ -1,0 +1,67 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
+/*
+ * Based on stm32mp157a device number configuration
+ * Author: licy.li@myirtech.com
+ */
+
+/dts-v1/;
+
+#include "stm32mp15xc-ya151c-t.dts"
+
+/ {
+	model = "MYIR MYD-YA157C-T  www.myir-tech.com";
+	compatible = "myir,stm32mp15xc-ya157c-t", "st,stm32mp157";
+	
+	memory@c0000000 {
+		device_type = "memory";
+		reg = <0xc0000000 0x20000000>;
+	};
+
+	reserved-memory {
+		gpu_reserved: gpu@da000000 {
+			reg = <0xda000000 0x4000000>;
+			no-map;
+		};
+
+		optee_memory: optee@0xde000000 {
+			reg = <0xde000000 0x02000000>;
+			no-map;
+		};
+	};
+
+};
+
+&cpu0{
+	cpu-supply = <&vddcore>;
+};
+
+&cpu1{
+	cpu-supply = <&vddcore>;
+};
+
+&gpu {
+	contiguous-area = <&gpu_reserved>;
+	status = "okay";
+};
+
+/*mipi dsi*/
+&dsi {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	status = "okay";
+
+};
+
+/*fd_can*/
+&m_can2{
+        pinctrl-names = "default", "sleep";
+        pinctrl-0 = <&fdcan2_pins_mx>;
+        pinctrl-1 = <&fdcan2_sleep_pins_mx>;
+        status = "okay";
+
+};
+
+
+
+
+

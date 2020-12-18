@@ -103,7 +103,7 @@
 
 	panel_backlight: panel-backlight {
 		compatible = "gpio-backlight";
-		gpios = <&gpiob 8 GPIO_ACTIVE_HIGH>;
+		gpios = <&gpiog 8 GPIO_ACTIVE_HIGH>;
 		default-on;	
 		status = "okay";
 	};
@@ -249,6 +249,19 @@
               status = "okay";
       };
 
+	 /*
+        tsc2007@48 {
+                compatible = "ti,tsc2007";
+                reg = <0x48>;
+                interrupt-parent = <&gpioe>;
+                interrupts = <12 IRQ_TYPE_EDGE_FALLING>;
+                gpios = <&gpioe 12 0>;
+                ti,x-plate-ohms = <180>;
+                status = "okay";
+        };
+        */
+
+
         stusb1600@28 {
 		compatible = "st,stusb1600";
 		reg = <0x28>;
@@ -281,9 +294,6 @@
                 lines-initial-states = <0xffff>;
                 status = "okay";
         };
-
-
-	
 };
 
 &i2c4 {
@@ -299,7 +309,7 @@
 	/delete-property/dma-names;
 	
 	eeprom@50 {
-          	compatible = "microchip,24c32", "atmel,24c32";
+          	compatible = "atmel,24c32";
           	reg = <0x50>;
           	pagesize = <32>;
           	wp-gpios = <&gpioa 14 0>;
@@ -450,14 +460,6 @@
 	status = "okay";
 };
 
-/*mipi dsi*/
-&dsi {
-	#address-cells = <1>;
-	#size-cells = <0>;
-	status = "okay";
-
-};
-
 &m4_rproc {
 	memory-region = <&retram>, <&mcuram>, <&mcuram2>, <&vdev0vring0>,
 			<&vdev0vring1>, <&vdev0buffer>;
@@ -605,22 +607,24 @@
 
 
 /* Bluetooth */
-&uart7 {
-	pinctrl-names = "default", "sleep", "idle";
-	pinctrl-0 = <&uart7_pins_myir>;
-	pinctrl-1 = <&uart7_sleep_pins_myir>;
-	pinctrl-2 = <&uart7_idle_pins_myir>;
-	uart-has-rtscts;
-	status = "okay";
+/* Bluetooth */
+&usart1{
+        pinctrl-names = "default", "sleep";
+        pinctrl-0 = <&usart1_pins_mx &usart1_pins_z_mx>;
+        pinctrl-1 = <&usart1_sleep_pins_mx &usart1_sleep_pins_z_mx>;
+        st,hw-flow-ctrl;
+        status = "okay";
 
-	bluetooth {
-		pinctrl-names = "default";
-		pinctrl-0 = <&btreg0>;
-		compatible = "brcm,bcm43438-bt";
-		max-speed = <3000000>;
-	};
+        bluetooth {
+                pinctrl-names = "default";
+                pinctrl-0 = <&pcf8575 3 GPIO_ACTIVE_LOW>;
+                compatible = "brcm,bcm43438-bt";
+                max-speed = <3000000>;
+        };
+
 
 };
+
 
 /*SPI1 for A7 core*/
 /*
