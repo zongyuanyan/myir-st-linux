@@ -605,22 +605,6 @@
         status = "okay";
 };
 
-/* Bluetooth */
-&usart1{
-	pinctrl-names = "default", "sleep";
-	pinctrl-0 = <&usart1_pins_mx &usart1_pins_z_mx>;
-	pinctrl-1 = <&usart1_sleep_pins_mx &usart1_sleep_pins_z_mx>;
-	st,hw-flow-ctrl;
-        status = "okay";
-
-        bluetooth {
-                pinctrl-names = "default";
-                pinctrl-0 = <&pcf8575 3 GPIO_ACTIVE_LOW>;
-                compatible = "brcm,bcm43438-bt";
-                max-speed = <3000000>;
-        };
-};
-
 
 /*SPI1 for A7 core*/
 /*
