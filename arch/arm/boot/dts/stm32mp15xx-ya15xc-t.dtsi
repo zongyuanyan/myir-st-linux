@@ -605,14 +605,12 @@
         status = "okay";
 };
 
-
-/* Bluetooth */
 /* Bluetooth */
 &usart1{
-        pinctrl-names = "default", "sleep";
-        pinctrl-0 = <&usart1_pins_mx &usart1_pins_z_mx>;
-        pinctrl-1 = <&usart1_sleep_pins_mx &usart1_sleep_pins_z_mx>;
-        st,hw-flow-ctrl;
+	pinctrl-names = "default", "sleep";
+	pinctrl-0 = <&usart1_pins_mx &usart1_pins_z_mx>;
+	pinctrl-1 = <&usart1_sleep_pins_mx &usart1_sleep_pins_z_mx>;
+	st,hw-flow-ctrl;
         status = "okay";
 
         bluetooth {
@@ -621,8 +619,6 @@
                 compatible = "brcm,bcm43438-bt";
                 max-speed = <3000000>;
         };
-
-
 };
 
 

@@ -11,7 +11,7 @@
 
 / {
     model = "MYIR YA15XC-HDMI-T www.myir-tech.com";
-    compatible = "myir,stm32mp15xc-ya157c-hdmi-t", "st,stm32mp157";
+    compatible = "myir,stm32mp15xc-ya157c-t", "st,stm32mp157";
 /*
 	sound {
         compatible = "audio-graph-card";

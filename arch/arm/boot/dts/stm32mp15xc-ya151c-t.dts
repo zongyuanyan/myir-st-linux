@@ -19,7 +19,7 @@
 	aliases {
                 ethernet0 = &ethernet0;
                 serial0 = &uart4; //debug
-                serial1 = &usart1; //bt
+                //serial1 = &usart1; //bt
                 serial2 = &uart7; //rs232
                 serial3 = &usart3; //rs485
 
