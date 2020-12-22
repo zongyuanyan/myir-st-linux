@@ -11,18 +11,19 @@ struct gpio_desc *btpwr;
 static int gpio_init_probe(struct platform_device *pdev)
 {
    int ret = 0;
+   //printk("initing bluetooth power\n");
 
-   btpwr = devm_gpiod_get_optional(&pdev->dev, "reset", GPIOD_OUT_HIGH);
+   btpwr = devm_gpiod_get(&pdev->dev, "bt", GPIOD_OUT_HIGH);
    if (IS_ERR(btpwr)) {
                 ret = PTR_ERR(btpwr);
-                printk("cannot reset %d\n", ret);
+               // printk("cannot reset %d\n", ret);
                 return ret;
    }
  
    ssleep(1);
    gpiod_set_value_cansleep(btpwr, 1);
    //gpiod_set_value(btpwr, 1);
-
+   printk("Initializing BT successfully\n");
    return(0);
 }
 

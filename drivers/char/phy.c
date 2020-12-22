@@ -65,12 +65,12 @@ static int gpio_init_probe(struct platform_device *pdev)
 {
    int ret = 0;
 
-   printk("phy init\n");
+  // printk("initing phy power\n");
 
    phy = devm_gpiod_get_optional(&pdev->dev, "reset", GPIOD_OUT_HIGH);
    if (IS_ERR(phy)) {
                 ret = PTR_ERR(phy);
-                //printk("cannot phy %d\n", ret);
+               // printk("cannot phy1 %d\n", ret);
                 return ret;
    }
 	 
@@ -80,14 +80,13 @@ static int gpio_init_probe(struct platform_device *pdev)
    
    
    phy_register_fixup_for_uid(PHY_ID_AR8035, 0xffffffef, ar8035_phy_fixup);
-
+   printk("Initializing PHY successfully\n");
    return(0);
 }
 
 static int gpio_exit_remove(struct platform_device *pdev)
 {
    printk("GPIO phy exit\n");
-   
    return(0);
 }
 
@@ -95,6 +94,7 @@ static int gpio_exit_remove(struct platform_device *pdev)
 /* if it does not match the compatible field of DT, nothing happens */
 static struct of_device_id myir_match[] = {
     {.compatible = "myir,ar8035"},
+   // {.compatible = "myir,bt_pwr"},
     {.compatible = "st,dummy"},
     {/* end node */}
 };

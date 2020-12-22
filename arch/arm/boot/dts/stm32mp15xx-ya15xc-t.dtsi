@@ -105,7 +105,8 @@
 	
 	bt_pwrseq {
                 compatible = "myir,bt_pwr";
-                reset-gpios = <&pcf8575 3 GPIO_ACTIVE_HIGH>;
+                bt-gpios = <&pcf8575 3 GPIO_ACTIVE_HIGH>;
+		status = "okay";
         };	
 	
         lte_pwrseq: lte-pwrseq {
@@ -640,7 +641,7 @@
 
         bluetooth {
                 //pinctrl-names = "default";
-               // pinctrl-0 = <&pcf8575 3 GPIO_ACTIVE_LOW>;
+                //pinctrl-0 = <&pcf8575 3 GPIO_ACTIVE_LOW>;
                 compatible = "brcm,bcm43438-bt";
                 max-speed = <3000000>;
         };
