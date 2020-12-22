@@ -29,7 +29,7 @@
 				};
 			};
 
-			/*HDMI cec tiny*/
+			/*no HDMI cec for tiny*/
 			cec_pins_a: cec-0 {
 				pins {
 					pinmux = <STM32_PINMUX('A', 15, AF4)>;

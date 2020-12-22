@@ -54,6 +54,13 @@
 		};
 	};
 
+	 clocks {
+                clk_ext_camera: clk-ext-camera {
+                        #clock-cells = <0>;
+                        compatible = "fixed-clock";
+                        clock-frequency = <24000000>;
+                };
+        };
 
 	joystick {
 	        compatible = "gpio-keys";
@@ -95,7 +102,12 @@
                 compatible = "mmc-pwrseq-simple";
                 reset-gpios = <&pcf8575 2 GPIO_ACTIVE_LOW>;
         };
-
+	
+	bt_pwrseq {
+                compatible = "myir,bt_pwr";
+                reset-gpios = <&pcf8575 3 GPIO_ACTIVE_HIGH>;
+        };	
+	
         lte_pwrseq: lte-pwrseq {
                 compatible = "myir,lte_pwrseq";
                 lte-gpios = <&pcf8575 1 GPIO_ACTIVE_LOW>;
@@ -239,12 +251,15 @@
 	status = "okay";
 };
 
+/*no hdmi cec*/
+/*
 &cec {
 	pinctrl-names = "default", "sleep";
 	pinctrl-0 = <&cec_pins_a>;
 	pinctrl-1 = <&cec_pins_sleep_a>;
-	status = "okay";
+	status = "disabled";
 };
+*/
 
 
 &i2c2 {
@@ -317,6 +332,24 @@
                 lines-initial-states = <0xffff>;
                 status = "okay";
         };
+
+	camera@30 {
+                compatible = "ovti,ov2659";
+                reg = <0x30>;
+                clocks = <&clk_ext_camera>;
+                clock-names = "xvclk";
+                powerdown-gpios = <&pcf8575 1 (GPIO_ACTIVE_HIGH | GPIO_PUSH_PULL)>;
+                reset-gpios = <&pcf8575 0 (GPIO_ACTIVE_LOW | GPIO_PUSH_PULL)>;
+                status = "okay";
+                
+                port {
+                        camera0: endpoint {
+                                remote-endpoint = <&dcmi_0>;
+                                link-frequencies = /bits/ 64 <70000000>;
+                        };
+                };
+        };
+
 };
 
 &i2c4 {
@@ -472,6 +505,20 @@
     };
 };
 
+/*DCMI for camera*/
+&dcmi {
+        status = "okay";
+        pinctrl-names = "default", "sleep";
+        pinctrl-0 = <&dcmi_pins_mx>;
+        pinctrl-1 = <&dcmi_sleep_pins_mx>;
+
+        port {
+                dcmi_0: endpoint {
+                        remote-endpoint = <&camera0>;
+                        link-frequencies = /bits/ 64 <70000000>;
+                };
+        };
+};
 
 &ipcc {
 	status = "okay";
@@ -592,13 +639,11 @@
         status = "okay";
 
         bluetooth {
-                pinctrl-names = "default";
-                pinctrl-0 = <&pcf8575 3 GPIO_ACTIVE_LOW>;
+                //pinctrl-names = "default";
+               // pinctrl-0 = <&pcf8575 3 GPIO_ACTIVE_LOW>;
                 compatible = "brcm,bcm43438-bt";
                 max-speed = <3000000>;
         };
-
-
 };
 
 
@@ -710,6 +755,7 @@
 };
 
 /*pwm */
+/*
 &timers4{
 	status = "disabled";
 	pwm4:pwm{
@@ -719,6 +765,7 @@
 		status = "okay";
 	};
 };
+*/
 
 &timers5 {
 	/delete-property/dmas;
