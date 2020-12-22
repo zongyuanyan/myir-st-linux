@@ -111,7 +111,7 @@
 	/*
 	panel_backlight: panel-backlight {
 		compatible = "pwm-backlight";
-		pwms = <&pwm4 0 5000000>;
+		pwms = <&pwm2 0 5000000>;
 		brightness-levels = <0 4 8 16 32 64 128 255>;
 		default-brightness-level = <6>;
 		status = "okay";
@@ -141,35 +141,58 @@
 };
 
 /*myir pin header
- *ANA0  ANA1 
- *PF13(ADC2_INP2) PF11(ADC1_INP2) 
- *PF14(ADC2_INP6 or ADC2_INN2) 
+ *ANA0 (ADC1_INP0 or ADC2_INP0)
+ *ANA1 (ADC1_INP1 or ADC2_INP1)
+ *PC0(ADC1_INP10 or ADC2_INP10) 
+ *PC3(ADC1_INP13 or ADC2_INN12) 
  *PF12(ADC1_INP6 or ADC1_INN2)
  *
  */
-//wait
-/*
-&adc {
-        pinctrl-names = "default";
-        pinctrl-0 = <&adc1_in6_pins_a>;
-        vdd-supply = <&vddref>;
-        vdda-supply = <&vddref>;
-        vref-supply = <&vddref>;
-        status = "disable";
-        adc1: adc@0 {
+&adc{
+	pinctrl-names = "default", "sleep";
+	pinctrl-0 = <&adc_pins_mx>;
+	pinctrl-1 = <&adc_sleep_pins_mx>;
+	vdd-supply = <&vdd>;
+        vdda-supply = <&vdd>;
+        vref-supply = <&vrefbuf>;
+	status = "okay";
+
+	adc1: adc@0 {
                 st,min-sample-time-nsecs = <10000>;
-                st,adc-channels = <6>;
+                st,adc-channels = <0 1 6 10 13>;
                 status = "okay";
         };
 
         adc2: adc@100 {
-                status = "disable";
+		st,min-sample-time-nsecs = <5000>;
+                st,adc-channels = <0 1 10 12>;
+                status = "okay";
         };
+	
+
         adc_temp: temp {
                 status = "okay";
         };
 };
-*/
+
+&dac{
+	pinctrl-names = "default", "sleep";
+	pinctrl-0 = <&dac1_pins_mx>;
+	pinctrl-1 = <&dac1_sleep_pins_mx>;
+	status = "okay";
+	vref-supply = <&vdda>;
+
+	/*PA4*/
+        dac1: dac@1 {
+                status = "disabled";
+        };
+	/*PA5*/
+        dac2: dac@2 {
+                status = "okay";
+        };
+
+};
+
 
 &optee {
 	status = "okay";
@@ -370,10 +393,10 @@
 			/*none*/
 			vdda: ldo1 {
 				regulator-name = "v1v8_audio";
-				regulator-min-microvolt = <1700000>;
+				regulator-min-microvolt = <3300000>;
 				regulator-max-microvolt = <3300000>;
 				regulator-always-on;
-				//interrupts = <IT_CURLIM_LDO1 0>;
+				interrupts = <IT_CURLIM_LDO1 0>;
 
 			};
 
@@ -382,7 +405,7 @@
 				regulator-min-microvolt = <1800000>;
 				regulator-max-microvolt = <1800000>;
 				regulator-always-on;
-				//interrupts = <IT_CURLIM_LDO2 0>;
+				interrupts = <IT_CURLIM_LDO2 0>;
 
 			};
 
@@ -565,7 +588,7 @@
         pinctrl-names = "default", "sleep";
         pinctrl-0 = <&usart1_pins_mx &usart1_pins_z_mx>;
         pinctrl-1 = <&usart1_sleep_pins_mx &usart1_sleep_pins_z_mx>;
-        st,hw-flow-ctrl;
+        uart-has-rtscts;
         status = "okay";
 
         bluetooth {
@@ -656,6 +679,21 @@
 	};
 };
 
+/*PWM for bg*/
+/*
+&timers2{
+	status = "okay";
+
+	pwm2:pwm{
+		pinctrl-names = "default", "sleep";
+		pinctrl-0 = <&tim2_pwm_pins_mx>;
+		pinctrl-1 = <&tim2_pwm_sleep_pins_mx>;
+		status = "okay";
+	};
+};
+*/
+
+
 &timers3 {
 	/delete-property/dmas;
 	/delete-property/dma-names;
@@ -672,16 +710,15 @@
 };
 
 /*pwm */
-/*
 &timers4{
-	status = "okay";
+	status = "disabled";
 	pwm4:pwm{
 		pinctrl-names = "default", "sleep";
 		pinctrl-0 = <&tim4_pwm_pins_mx>;
 		pinctrl-1 = <&tim4_pwm_sleep_pins_mx>;
 		status = "okay";
 	};
-};*/
+};
 
 &timers5 {
 	/delete-property/dmas;
@@ -771,6 +808,6 @@
 &vrefbuf {
 	regulator-min-microvolt = <2500000>;
 	regulator-max-microvolt = <2500000>;
-	vdda-supply = <&vdd>;
+	vdda-supply = <&vdda>;
 	status = "okay";
 };
