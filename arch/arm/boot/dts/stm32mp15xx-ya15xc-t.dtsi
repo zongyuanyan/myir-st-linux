@@ -109,6 +109,7 @@
 		status = "okay";
         };	
 	
+	
         lte_pwrseq: lte-pwrseq {
                 compatible = "myir,lte_pwrseq";
                 lte-gpios = <&pcf8575 1 GPIO_ACTIVE_LOW>;
@@ -578,6 +579,10 @@
      brcmf: bcrmf@1 {
          reg = <1>;
          compatible = "brcm,bcm4329-fmac";
+        // interrupt-parent = <&pcf8575>;
+        // interrupts = <>;
+        // interrupt-names = "host-wake";
+
      };
 };
 
@@ -640,8 +645,9 @@
         status = "okay";
 
         bluetooth {
-                //pinctrl-names = "default";
-                //pinctrl-0 = <&pcf8575 3 GPIO_ACTIVE_LOW>;
+		//shutdown-gpios = <&pcf8575 3 GPIO_ACTIVE_HIGH>;
+		//device-wakeup-gpios = <&pcf8575 15 GPIO_ACTIVE_HIGH>;
+		//host-wakeup-gpios = <>;
                 compatible = "brcm,bcm43438-bt";
                 max-speed = <3000000>;
         };

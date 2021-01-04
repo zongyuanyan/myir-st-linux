@@ -483,6 +483,7 @@
 };
 
 /*SPI1 for A7 core*/
+/*
 &spi1 {
 	pinctrl-names = "default", "sleep";
         pinctrl-0 = <&spi1_pins_a>;
@@ -496,7 +497,7 @@
     };
 
 };
-
+*/
 
 /*SPI1 for M4 core*/
 /*
