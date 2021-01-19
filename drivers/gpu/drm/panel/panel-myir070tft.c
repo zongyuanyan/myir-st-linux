@@ -271,6 +271,7 @@ static int myir_panel_probe(struct device *dev,
 	panel->desc = desc;
 
 
+	/*
 	panel->enable_gpio = devm_gpiod_get(dev, "enable", GPIOD_OUT_HIGH);
         if (IS_ERR(panel->enable_gpio)) {
                 ret = PTR_ERR(panel->enable_gpio);
@@ -285,6 +286,8 @@ static int myir_panel_probe(struct device *dev,
                 dev_err(dev, "cannot get reset-gpios %d\n", ret);
                 return ret;
         }
+	*/
+
 /*
 	panel->dvdd = devm_regulator_get(dev, "dvdd");
 	if (IS_ERR(panel->dvdd))

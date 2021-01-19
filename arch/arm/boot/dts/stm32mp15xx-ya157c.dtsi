@@ -500,14 +500,14 @@
 */
 
 /*SPI1 for M4 core*/
-/*
+
 &m4_spi1 {
    pinctrl-names = "rproc_default";
    pinctrl-0 = <&m4_spi1_pins_z_mx>;
    status = "okay";
 
 };
-*/
+
 
 &sram {
 	dma_pool: dma_pool@0 {

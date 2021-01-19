@@ -108,7 +108,10 @@
                 bt-gpios = <&pcf8575 3 GPIO_ACTIVE_HIGH>;
 		status = "okay";
         };	
-	
+	cam_pwrseq {
+		compatible = "myir,cam_pwr";
+		power-gpios = <&pcf8575 1 GPIO_ACTIVE_HIGH>;
+	};
 	
         lte_pwrseq: lte-pwrseq {
                 compatible = "myir,lte_pwrseq";
@@ -340,7 +343,7 @@
                 reg = <0x30>;
                 clocks = <&clk_ext_camera>;
                 clock-names = "xvclk";
-                powerdown-gpios = <&pcf8575 1 (GPIO_ACTIVE_HIGH | GPIO_PUSH_PULL)>;
+               // powerdown-gpios = <&pcf8575 1 (GPIO_ACTIVE_HIGH | GPIO_PUSH_PULL)>;
                 reset-gpios = <&pcf8575 0 (GPIO_ACTIVE_LOW | GPIO_PUSH_PULL)>;
                 status = "okay";
                 

@@ -7,10 +7,11 @@
 #include <linux/phy.h> 
 
 struct gpio_desc *btpwr;
+struct gpio_desc *campwr;
 
 static int gpio_init_probe(struct platform_device *pdev)
 {
-   int ret = 0;
+   int ret = -1;
    //printk("initing bluetooth power\n");
 
    btpwr = devm_gpiod_get(&pdev->dev, "bt", GPIOD_OUT_HIGH);
@@ -24,6 +25,17 @@ static int gpio_init_probe(struct platform_device *pdev)
    gpiod_set_value_cansleep(btpwr, 1);
    //gpiod_set_value(btpwr, 1);
    printk("Initializing BT successfully\n");
+
+   campwr = devm_gpiod_get(&pdev->dev, "cam", GPIOD_OUT_HIGH);
+   if (IS_ERR(btpwr)) {
+                ret = PTR_ERR(btpwr);
+               // printk("cannot reset %d\n", ret);
+                return ret;
+   }
+   ssleep(1);
+   gpiod_set_value_cansleep(btpwr, 1);
+   printk("Initializing CAM successfully\n");
+
    return(0);
 }
 
@@ -39,6 +51,7 @@ static int gpio_exit_remove(struct platform_device *pdev)
 static struct of_device_id dummy_match[] = {
     {.compatible = "myir,bt_pwr"},
     {.compatible = "st,dummy"},
+    {.compatible = "myir,cam_pwr"},
     {/* end node */}
 };
 
