@@ -303,7 +303,11 @@
                 status = "okay";
         };
         */
-
+	rtc1: rtc1@32 {
+		compatible = "epson,rx8025";
+		reg = <0x32>;
+		status = "okay";
+	};
 
         stusb1600@28 {
 		compatible = "st,stusb1600";

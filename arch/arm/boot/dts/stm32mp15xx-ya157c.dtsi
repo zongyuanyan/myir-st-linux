@@ -29,19 +29,19 @@
 
 		vdev0vring0: vdev0vring0@10040000 {
 			compatible = "shared-dma-pool";
-			reg = <0x10040000 0x1000>;
+			reg = <0x10040000 0x2000>;
 			no-map;
 		};
 
 		vdev0vring1: vdev0vring1@10041000 {
 			compatible = "shared-dma-pool";
-			reg = <0x10041000 0x1000>;
+			reg = <0x10042000 0x2000>;
 			no-map;
 		};
 
 		vdev0buffer: vdev0buffer@10042000 {
 			compatible = "shared-dma-pool";
-			reg = <0x10042000 0x4000>;
+			reg = <0x10044000 0x4000>;
 			no-map;
 		};
 
@@ -189,12 +189,23 @@
 	status = "okay";
 };
 
+/*
 &dma1 {
 	sram = <&dma_pool>;
 };
 
 &dma2 {
 	sram = <&dma_pool>;
+};
+*/
+&m4_dma1 {
+	status = "okay";
+
+};
+
+&m4_dma2 {
+        status = "okay";
+
 };
 
 &dts {

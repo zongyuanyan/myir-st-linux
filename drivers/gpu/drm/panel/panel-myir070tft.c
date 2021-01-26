@@ -271,7 +271,7 @@ static int myir_panel_probe(struct device *dev,
 	panel->desc = desc;
 
 
-	/*
+	
 	panel->enable_gpio = devm_gpiod_get(dev, "enable", GPIOD_OUT_HIGH);
         if (IS_ERR(panel->enable_gpio)) {
                 ret = PTR_ERR(panel->enable_gpio);
@@ -279,7 +279,7 @@ static int myir_panel_probe(struct device *dev,
                 return ret;
         }
 
-
+/*
         panel->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
         if (IS_ERR(panel->reset_gpio)) {
                 ret = PTR_ERR(panel->reset_gpio);

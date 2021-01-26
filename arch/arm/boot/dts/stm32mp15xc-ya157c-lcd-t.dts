@@ -18,7 +18,7 @@
         	pinctrl-names = "default", "sleep";
         	pinctrl-0 = <&ltdc_pins_a>;
         	pinctrl-1 = <&ltdc_pins_sleep_a>;
-		//enable-gpios = <&gpioi 3 GPIO_ACTIVE_HIGH>;
+		enable-gpios = <&gpioi 3 GPIO_ACTIVE_HIGH>;
         	//reset-gpios = <&gpioe 11 GPIO_ACTIVE_HIGH>;
 		interrupts = <3 IRQ_TYPE_EDGE_FALLING>;
                 interrupt-parent = <&gpioi>;
