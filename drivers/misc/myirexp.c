@@ -9,7 +9,6 @@
 struct gpio_desc *btpwr;
 struct gpio_desc *campwr;
 
-test
 static int gpio_init_probe(struct platform_device *pdev)
 {
    int ret = -1;
