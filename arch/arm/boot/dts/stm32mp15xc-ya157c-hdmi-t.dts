@@ -10,7 +10,7 @@
 #include "stm32mp15xc-ya157c-t.dts"
 
 / {
-    model = "MYIR YA15XC-HDMI-T www.myir-tech.com";
+    model = "MYIR YA15XC-HDMI-T www.myir-tech.com test";
     compatible = "myir,stm32mp15xc-ya157c-t", "st,stm32mp157";
 /*
 	sound {
