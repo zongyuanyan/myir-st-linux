@@ -715,6 +715,24 @@
 };
 */
 
+&spi5 {
+	pinctrl-names = "default", "sleep";
+	pinctrl-0 = <&spi5_pins_mx>;
+	pinctrl-1 = <&spi5_sleep_pins_mx>;
+	cs-gpios = <&gpioh 5 0>;
+	status = "okay";
+
+	/* USER CODE BEGIN spi5 */
+	/* USER CODE END spi5 */
+	spidev@0 {     
+       		 compatible = "spidev";
+        	spi-max-frequency = <20000000>;
+        	reg = <0>;
+    };
+};
+
+
+
 &sram {
 	dma_pool: dma_pool@0 {
 		reg = <0x50000 0x10000>;
