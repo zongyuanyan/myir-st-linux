@@ -6,22 +6,20 @@
 #include <linux/platform_device.h>
 #include <linux/phy.h> 
 
-struct gpio_desc *btpwr;
+struct gpio_desc *campwr;
 
 static int gpio_init_probe(struct platform_device *pdev)
 {
    int ret = -1;
-
-   btpwr = devm_gpiod_get(&pdev->dev, "bt", GPIOD_OUT_HIGH);
-   if (IS_ERR(btpwr)) {
-                ret = PTR_ERR(btpwr);
+   campwr = devm_gpiod_get(&pdev->dev, "cam", GPIOD_OUT_HIGH);
+   if (IS_ERR(campwr)) {
+                ret = PTR_ERR(campwr);
                // printk("cannot reset %d\n", ret);
                 return ret;
    }
- 
    ssleep(1);
-   gpiod_set_value_cansleep(btpwr, 1);
-   printk("Initializing BT successfully\n");
+   gpiod_set_value_cansleep(campwr, 1);
+   printk("Initializing CAM successfully\n");
 
    return(0);
 }
@@ -36,7 +34,7 @@ static int gpio_exit_remove(struct platform_device *pdev)
 /* this structure does the matching with the device tree */
 /* if it does not match the compatible field of DT, nothing happens */
 static struct of_device_id dummy_match[] = {
-    {.compatible = "myir,bt_pwr"},
+    {.compatible = "myir,cam_pwr"},
     {/* end node */}
 };
 
@@ -44,7 +42,7 @@ static struct platform_driver dummy_driver = {
     .probe = gpio_init_probe,
     .remove = gpio_exit_remove,
     .driver = {
-        .name = "dummy_driver",
+        .name = "cam_driver",
                 .owner = THIS_MODULE,
                 .of_match_table = dummy_match,
     }
@@ -53,6 +51,6 @@ static struct platform_driver dummy_driver = {
 module_platform_driver(dummy_driver);
 
 MODULE_AUTHOR("licy");
-MODULE_DESCRIPTION("Gpio phy init");
+MODULE_DESCRIPTION("Gpio cam init");
 MODULE_LICENSE("GPL");
-MODULE_ALIAS("platform:dummy_driver");
+MODULE_ALIAS("platform:cam_driver");

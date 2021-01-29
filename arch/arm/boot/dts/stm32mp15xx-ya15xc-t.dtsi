@@ -110,18 +110,7 @@
         };	
 	cam_pwrseq {
 		compatible = "myir,cam_pwr";
-		power-gpios = <&pcf8575 1 GPIO_ACTIVE_HIGH>;
-	};
-	
-        lte_pwrseq: lte-pwrseq {
-                compatible = "myir,lte_pwrseq";
-                lte-gpios = <&pcf8575 1 GPIO_ACTIVE_LOW>;
-        };
-
-	panel_backlight: panel-backlight {
-		compatible = "gpio-backlight";
-		gpios = <&gpiog 8 GPIO_ACTIVE_HIGH>;
-		default-on;	
+		cam-gpios = <&pcf8575 1 GPIO_ACTIVE_HIGH>;
 		status = "okay";
 	};
 	
@@ -130,10 +119,11 @@
 		compatible = "pwm-backlight";
 		pwms = <&pwm2 0 5000000>;
 		brightness-levels = <0 4 8 16 32 64 128 255>;
-		default-brightness-level = <6>;
+		default-brightness-level = <7>;
 		status = "okay";
 	};
 	*/
+	
 
 	usb_phy_tuning: usb-phy-tuning {
 		st,hs-dc-level = <2>;
@@ -207,9 +197,7 @@
         dac2: dac@2 {
                 status = "okay";
         };
-
 };
-
 
 &optee {
 	status = "okay";
@@ -303,6 +291,7 @@
                 status = "okay";
         };
         */
+
 	rtc1: rtc1@32 {
 		compatible = "epson,rx8025";
 		reg = <0x32>;
@@ -333,14 +322,7 @@
 		};
 	};
 
-	pcf8575: gpio@20 {
-                compatible = "nxp,pcf8575";
-                reg = <0x20>;
-                gpio-controller;
-                #gpio-cells = <2>;
-                lines-initial-states = <0xffff>;
-                status = "okay";
-        };
+
 
 	camera@30 {
                 compatible = "ovti,ov2659";
@@ -357,6 +339,16 @@
                                 link-frequencies = /bits/ 64 <70000000>;
                         };
                 };
+        };
+
+
+	pcf8575: gpio@20 {
+                compatible = "nxp,pcf8575";
+                reg = <0x20>;
+                gpio-controller;
+                #gpio-cells = <2>;
+                lines-initial-states = <0xffff>;
+                status = "okay";
         };
 
 };
@@ -529,6 +521,7 @@
         };
 };
 
+
 &ipcc {
 	status = "okay";
 };
@@ -688,33 +681,6 @@
 };
 
 
-/*SPI1 for A7 core*/
-/*
-&spi1 {
-	pinctrl-names = "default", "sleep";
-        pinctrl-0 = <&spi1_pins_a>;
-        pinctrl-1 = <&spi1_sleep_pins_a>;
-	    cs-gpios = <&gpioz 3 0>;
-        status = "okay";
-	spidev@0 {     
-       		 compatible = "spidev";
-        	spi-max-frequency = <20000000>;
-        	reg = <0>;
-    };
-
-};*/
-
-
-/*SPI1 for M4 core*/
-/*
-&m4_spi1 {
-   pinctrl-names = "rproc_default";
-   pinctrl-0 = <&m4_spi1_pins_z_mx>;
-   status = "okay";
-
-};
-*/
-
 &spi5 {
 	pinctrl-names = "default", "sleep";
 	pinctrl-0 = <&spi5_pins_mx>;
@@ -722,8 +688,6 @@
 	cs-gpios = <&gpioh 5 0>;
 	status = "okay";
 
-	/* USER CODE BEGIN spi5 */
-	/* USER CODE END spi5 */
 	spidev@0 {     
        		 compatible = "spidev";
         	spi-max-frequency = <20000000>;
@@ -741,7 +705,6 @@
 };
 
 &timers1 {
-	/* spare dmas for other usage */
 	/delete-property/dmas;
 	/delete-property/dma-names;
 	status = "disabled";
@@ -883,6 +846,7 @@
 	phy-supply = <&vdd_usb>;
 	st,phy-tuning = <&usb_phy_tuning>;
 };
+
 
 &vrefbuf {
 	regulator-min-microvolt = <2500000>;

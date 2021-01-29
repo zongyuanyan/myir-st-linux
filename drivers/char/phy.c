@@ -94,7 +94,6 @@ static int gpio_exit_remove(struct platform_device *pdev)
 /* if it does not match the compatible field of DT, nothing happens */
 static struct of_device_id myir_match[] = {
     {.compatible = "myir,ar8035"},
-   // {.compatible = "myir,bt_pwr"},
     {.compatible = "st,dummy"},
     {/* end node */}
 };

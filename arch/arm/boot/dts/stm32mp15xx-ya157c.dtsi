@@ -100,7 +100,7 @@
 		default-on;	
 		status = "okay";
 	};
-	
+
 	/*
 	panel_backlight: panel-backlight {
 		compatible = "pwm-backlight";

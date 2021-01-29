@@ -55,3 +55,4 @@ obj-$(CONFIG_ADI)		+= adi.o
 
 #for myir ya157c-v2 ar8035 init
 obj-y                       += phy.o
+
