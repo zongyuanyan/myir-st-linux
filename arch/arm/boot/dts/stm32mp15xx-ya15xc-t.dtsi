@@ -2,6 +2,7 @@
 /*
  * Copyright (C) STMicroelectronics 2019 - All Rights Reserved
  * Author: Alexandre Torgue <alexandre.torgue@st.com> for STMicroelectronics.
+ * Author: licy licy.li@myirtech.com
  */
 
 #include "stm32mp157-m4-srm.dtsi"
@@ -54,6 +55,8 @@
 		};
 	};
 
+	/*camera clock*/
+	
 	 clocks {
                 clk_ext_camera: clk-ext-camera {
                         #clock-cells = <0>;
@@ -62,6 +65,8 @@
                 };
         };
 
+	
+	/*button S2*/
 	joystick {
 	        compatible = "gpio-keys";
         	#size-cells = <0>;
@@ -73,7 +78,7 @@
         	};
 	};
 
-
+	/*Run LED*/
 	led {
         	compatible = "gpio-leds";
         	blue {
@@ -82,6 +87,7 @@
                         linux,default-trigger = "heartbeat";
                         default-state = "off";
                 };
+
                 blue_ex {
                         label = "heartbeat";
                         gpios = <&pcf8575 4 GPIO_ACTIVE_HIGH>;
@@ -92,6 +98,7 @@
 
 	};
 	
+	/*ether phy pwr */
 	myir_driver {
                 compatible = "myir,ar8035";
                 reset-gpios = <&gpiog 3 GPIO_ACTIVE_HIGH>;
@@ -114,6 +121,7 @@
 		status = "okay";
 	};
 	
+	/*pwm for backlight*/
 	/*
 	panel_backlight: panel-backlight {
 		compatible = "pwm-backlight";
@@ -147,20 +155,21 @@
 
 };
 
-/*myir pin header
+/* adc 
+ *myir pin header
  *ANA0 (ADC1_INP0 or ADC2_INP0)
  *ANA1 (ADC1_INP1 or ADC2_INP1)
  *PC0(ADC1_INP10 or ADC2_INP10) 
  *PC3(ADC1_INP13 or ADC2_INN12) 
  *PF12(ADC1_INP6 or ADC1_INN2)
- *
  */
+
 &adc{
 	pinctrl-names = "default", "sleep";
 	pinctrl-0 = <&adc_pins_mx>;
 	pinctrl-1 = <&adc_sleep_pins_mx>;
 	vdd-supply = <&vdd>;
-        vdda-supply = <&vdd>;
+        vdda-supply = <&vdda>;
         vref-supply = <&vrefbuf>;
 	status = "okay";
 
@@ -182,6 +191,7 @@
         };
 };
 
+/*dac*/
 &dac{
 	pinctrl-names = "default", "sleep";
 	pinctrl-0 = <&dac1_pins_mx>;
@@ -189,15 +199,16 @@
 	status = "okay";
 	vref-supply = <&vdda>;
 
-	/*PA4*/
+	//PA4
         dac1: dac@1 {
                 status = "disabled";
         };
-	/*PA5*/
+	//PA5
         dac2: dac@2 {
                 status = "okay";
         };
 };
+
 
 &optee {
 	status = "okay";
@@ -254,16 +265,6 @@
 };
 */
 
-&i2c1{
-	pinctrl-names = "default", "sleep";
-	pinctrl-0 = <&i2c1_pins_mx>;
-	pinctrl-1 = <&i2c1_sleep_pins_mx>;
-	status = "okay";
-
-
-};
-
-
 &i2c2 {
 	pinctrl-names = "default", "sleep";
         pinctrl-0 = <&i2c2_pins_mx &i2c2_pins_z_mx>;
@@ -301,11 +302,13 @@
         };
         */
 
+	/*rtc1*/
 	rtc1: rtc1@32 {
 		compatible = "epson,rx8025";
 		reg = <0x32>;
 		status = "okay";
 	};
+
 
         stusb1600@28 {
 		compatible = "st,stusb1600";
@@ -332,13 +335,11 @@
 	};
 
 
-
 	camera@30 {
                 compatible = "ovti,ov2659";
                 reg = <0x30>;
                 clocks = <&clk_ext_camera>;
                 clock-names = "xvclk";
-               // powerdown-gpios = <&pcf8575 1 (GPIO_ACTIVE_HIGH | GPIO_PUSH_PULL)>;
                 reset-gpios = <&pcf8575 0 (GPIO_ACTIVE_LOW | GPIO_PUSH_PULL)>;
                 status = "okay";
                 
@@ -362,6 +363,7 @@
 
 };
 
+#if 1
 &i2c4 {
 	pinctrl-names = "default", "sleep";
 	pinctrl-0 = <&i2c4_pins_a>;
@@ -370,10 +372,10 @@
 	i2c-scl-falling-time-ns = <20>;
 	clock-frequency = <400000>;
 	status = "okay";
-	/* spare dmas for other usage */
 	/delete-property/dmas;
 	/delete-property/dma-names;
 	
+	/*eeprom*/
 	eeprom@50 {
           	compatible = "atmel,24c32";
           	reg = <0x50>;
@@ -392,9 +394,21 @@
 
 		regulators {
 			compatible = "st,stpmic1-regulators";
-		
+			buck1-supply = <&vin>;
+			buck2-supply = <&vin>;
+			buck3-supply = <&vin>;
+			buck4-supply = <&vin>;
+			ldo1-supply = <&v3v3>;
+			ldo2-supply = <&vin>;
+			ldo3-supply = <&vdd_ddr>;
+			ldo4-supply = <&vin>;
+			ldo5-supply = <&vin>;
+			ldo6-supply = <&v3v3>;
+			vref_ddr-supply = <&vin>;
+			boost-supply = <&vin>;
 			pwr_sw1-supply = <&bst_out>;
 			pwr_sw2-supply = <&bst_out>;
+		
 
 			vddcore: buck1 {
 				regulator-name = "vddcore";
@@ -433,9 +447,9 @@
 				regulator-initial-mode = <0>;
 			};
 			
-			/*none*/
+			/*no use*/
 			vdda: ldo1 {
-				regulator-name = "v1v8_audio";
+				regulator-name = "vdda";
 				regulator-min-microvolt = <3300000>;
 				regulator-max-microvolt = <3300000>;
 				regulator-always-on;
@@ -467,7 +481,6 @@
 				interrupts = <IT_CURLIM_LDO4 0>;
 				regulator-always-on;
 			};
-
 
 			vdd_sd: ldo5 {
 				regulator-name = "vdd_sd";
@@ -510,10 +523,13 @@
 
 		watchdog {
 			compatible = "st,stpmic1-wdt";
-			status = "okay";
+			status = "disabled";
 		};
     };
 };
+#endif
+
+
 
 /*DCMI for camera*/
 &dcmi {
@@ -552,10 +568,9 @@
 	status = "okay";
 };
 
-
 &pwr_regulators {
 	vdd-supply = <&vdd>;
-	//vdd_3v3_usbfs-supply = <&vdd_usb>;
+	vdd_3v3_usbfs-supply = <&vdd_usb>;
 };
 
 
@@ -563,7 +578,7 @@
 	status = "okay";
 };
 
-/*rtc*/
+/*rtc0*/
 &rtc {
 	status = "okay";
 };
@@ -689,7 +704,6 @@
         status = "okay";
 };
 
-
 &spi5 {
 	pinctrl-names = "default", "sleep";
 	pinctrl-0 = <&spi5_pins_mx>;
@@ -704,8 +718,6 @@
     };
 };
 
-
-
 &sram {
 	dma_pool: dma_pool@0 {
 		reg = <0x50000 0x10000>;
@@ -713,20 +725,6 @@
 	};
 };
 
-&timers1 {
-	/delete-property/dmas;
-	/delete-property/dma-names;
-	status = "disabled";
-	pwm {
-		pinctrl-0 = <&pwm1_pins_a>;
-		pinctrl-1 = <&pwm1_sleep_pins_a>;
-		pinctrl-names = "default", "sleep";
-		status = "okay";
-	};
-	timer@0 {
-		status = "okay";
-	};
-};
 
 /*PWM for bg*/
 /*
@@ -743,23 +741,6 @@
 */
 
 
-&timers3 {
-	/delete-property/dmas;
-	/delete-property/dma-names;
-	status = "disabled";
-	pwm {
-		pinctrl-0 = <&pwm3_pins_a>;
-		pinctrl-1 = <&pwm3_sleep_pins_a>;
-		pinctrl-names = "default", "sleep";
-		status = "okay";
-	};
-	timer@2 {
-		status = "okay";
-	};
-};
-
-/*pwm */
-/*
 &timers4{
 	status = "disabled";
 	pwm4:pwm{
@@ -769,56 +750,16 @@
 		status = "okay";
 	};
 };
-*/
 
-&timers5 {
-	/delete-property/dmas;
-	/delete-property/dma-names;
-	status = "disabled";
-	pwm {
-		pinctrl-0 = <&pwm5_pins_a>;
-		pinctrl-1 = <&pwm5_sleep_pins_a>;
-		pinctrl-names = "default", "sleep";
-		status = "okay";
-	};
-	timer@4 {
-		status = "okay";
-	};
-};
+/*usb host ehci*/
 
-&timers6 {
-	/delete-property/dmas;
-	/delete-property/dma-names;
-	status = "disabled";
-	timer@5 {
-		status = "okay";
-	};
-};
-
-&timers12 {
-	/delete-property/dmas;
-	/delete-property/dma-names;
-	status = "disabled";
-	pwm {
-		pinctrl-0 = <&pwm12_pins_a>;
-		pinctrl-1 = <&pwm12_sleep_pins_a>;
-		pinctrl-names = "default", "sleep";
-		status = "okay";
-	};
-	timer@11 {
-		status = "okay";
-	};
-};
-
-
-/*usb host*/
 &usbh_ehci {
 	phys = <&usbphyc_port0>;
 	phy-names = "usb";
 	status = "okay";
 };
 
-/*USB*/
+/*usb host ohci*/
 /*
 &usbh_ohci {
    phys = <&usbphyc_port0>; 
@@ -855,7 +796,6 @@
 	phy-supply = <&vdd_usb>;
 	st,phy-tuning = <&usb_phy_tuning>;
 };
-
 
 &vrefbuf {
 	regulator-min-microvolt = <2500000>;

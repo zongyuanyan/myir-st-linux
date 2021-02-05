@@ -1088,17 +1088,6 @@
                                          <STM32_PINMUX('F', 7, ANALOG)>; /* UART7_TX */
                                 };
                         };
-
-			btreg0: bt_reg_on-0 {
-				pins {
-					pinmux = <STM32_PINMUX('F', 15, GPIO)>;
-					drive-push-pull;
-					bias-pull-up;
-					output-high;
-					slew-rate = <0>;
-				};
-			};
-
 			
 			usbotg_hs_pins_a: usbotg_hs-0 {
 				pins {
@@ -1214,15 +1203,6 @@
 			
 
 &pinctrl_z {
-			btreg: bt_reg_on-0 {
-				pins {
-					pinmux = <STM32_PINMUX('Z', 6, GPIO)>;
-					drive-push-pull;
-					bias-pull-up;
-					output-high;
-					slew-rate = <0>;
-				};
-			};
 
 			usart1_pins_z_mx: usart1_mx-0 {
 				pins1 {

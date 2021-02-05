@@ -54,11 +54,10 @@
 
 /*fd_can*/
 &m_can2{
-        pinctrl-names = "default", "sleep";
+        pinctrl-names = "default";
         pinctrl-0 = <&fdcan2_pins_mx>;
-        pinctrl-1 = <&fdcan2_sleep_pins_mx>;
+       // pinctrl-1 = <&fdcan2_sleep_pins_mx>;
         status = "okay";
-
 };
 
 
