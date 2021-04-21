@@ -1016,7 +1016,8 @@ dtb-$(CONFIG_ARCH_STM32) += \
 	stm32mp15xc-ya157c-t.dtb \
 	stm32mp15xc-ya151c-lcd-t.dtb \
 	stm32mp15xc-ya157c-hdmi-t.dtb \
-	stm32mp15xc-ya157c-lcd-t.dtb 
+	stm32mp15xc-ya157c-lcd-t.dtb \
+        stm32mp15xc-ya15xc-pcb-test.dtb	
 
 dtb-$(CONFIG_MACH_SUN4I) += \
 	sun4i-a10-a1000.dtb \
