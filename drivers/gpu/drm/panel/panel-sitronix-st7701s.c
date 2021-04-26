@@ -116,6 +116,7 @@
 #define ST7701S_CMD2_BK1_SPD2_SET		ST7701S_CMD2_BK1_SPD1_SET
 #define ST7701S_MIPISET1_EOT_EN		BIT(3)
 #define ST7701S_CMD2_BK1_MIPISET1_SET	(BIT(7) | ST7701S_MIPISET1_EOT_E
+
 /*
 #define ST7701S_TEST(val, func)			\
 	do {					\
@@ -123,6 +124,7 @@
 			return val;		\
 	} while (0)
 */
+
 struct ST7701S {
 	struct drm_panel my_panel;
 	struct spi_device *spi;
@@ -558,6 +560,6 @@ static struct spi_driver ST7701S_driver = {
 };
 module_spi_driver(ST7701S_driver);
 
-MODULE_AUTHOR("Maxime Ripard <maxime.ripard@free-electrons.com>");
+MODULE_AUTHOR("miller.wu@myirtech.com");
 MODULE_DESCRIPTION("Sitronix ST7701S SPI_LCD Driver");
 MODULE_LICENSE("GPL v2");
