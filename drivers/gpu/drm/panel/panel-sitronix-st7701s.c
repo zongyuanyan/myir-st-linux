@@ -116,7 +116,13 @@
 #define ST7701S_CMD2_BK1_SPD2_SET		ST7701S_CMD2_BK1_SPD1_SET
 #define ST7701S_MIPISET1_EOT_EN		BIT(3)
 #define ST7701S_CMD2_BK1_MIPISET1_SET	(BIT(7) | ST7701S_MIPISET1_EOT_E
-
+/*
+#define ST7701S_TEST(val, func)			\
+	do {					\
+		if ((val = (func)))		\
+			return val;		\
+	} while (0)
+*/
 struct ST7701S {
 	struct drm_panel my_panel;
 	struct spi_device *spi;
@@ -153,6 +159,7 @@ static int ST7701S_spi_write(struct ST7701S *ctx, enum ST7701S_prefix prefix,
 	xfer.tx_buf = &txbuf;
 	xfer.bits_per_word = 9;
 	xfer.len = sizeof(txbuf);
+	//xfer.cs_change =1;
 
 	spi_message_add_tail(&xfer, &msg);
 	return spi_sync(ctx->spi, &msg);
@@ -178,9 +185,9 @@ static const struct drm_display_mode default_mode = {
 	.hsync_end = 480 + 10 + 2,
 	.htotal = 480 + 10 + 2 + 10,
 	.vdisplay = 480,
-	.vsync_start = 480 + 8,
-	.vsync_end = 480 + 8 + 2,
-	.vtotal = 480 + 8 + 2 + 16,
+	.vsync_start = 480 + 10,
+	.vsync_end = 480 + 10 + 2,
+	.vtotal = 480 + 10 + 2 + 16,
 	.vrefresh = 60,
 };
 
@@ -221,143 +228,143 @@ static int ST7701S_prepare(struct drm_panel *panel )
 	ST7701S_write_command(ctx, ST7701S_SLLEP_OUT);
 	msleep(150);
 
-	ST7701S_write_command(ctx,ST7701S_PIXEL_FORMAT);
-	ST7701S_write_data(ctx,0x60);/*18bit*/
-	//choose command2 BK0
-	ST7701S_write_command(ctx,ST7701S_CMD2BKX_SEL );
-	ST7701S_write_data(ctx,0x77);
-	ST7701S_write_data(ctx,0x01);
-	ST7701S_write_data(ctx,0x00);
-	ST7701S_write_data(ctx,0x00);
-	ST7701S_write_data(ctx,0x10);
-	ST7701S_write_command(ctx,ST7701S_CMD2_BK0_LNESET);/*设置480行*/
-	ST7701S_write_data(ctx,0x63);
-	ST7701S_write_data(ctx,0x00);
-	ST7701S_write_command(ctx,ST7701S_CMD2_BK0_PORCTRL_VBP);//v back front 
-	ST7701S_write_data(ctx,0x0E);//vbp=14
-	ST7701S_write_data(ctx,0x08);//vfp=8
-	ST7701S_write_command(ctx,ST7701S_CMD2_BK0_INVSET);
-	ST7701S_write_data(ctx,0x31);
-	ST7701S_write_data(ctx,0x08);/*每行多少像素*/
-	/*ST7701S_write_data(ctx,0x88);
-	RGB HV mode,VSYNC HSYNC 低电平有效
-	DOCLK 时钟下降沿输入数据
-	DE=1使能引脚为高
-	*/
-	ST7701S_write_command(ctx,ST7701S_RGBCTRL_CMD);//RGB 控制
-	ST7701S_write_data(ctx,0x83);
-	/*HBP=10,HFP=10*/
-	ST7701S_write_data(ctx,0x0C);/*设置HBP*/
-	ST7701S_write_data(ctx,0x10);//VBP 10
-	ST7701S_write_command(ctx,ST7701S_CORLOR_CONTROL);
-	ST7701S_write_data(ctx,0x08);
-	//Positive Voltage Gamma
-	ST7701S_write_command(ctx,ST7701S_CMD2_BK0_PVGAMCTRL);
-	ST7701S_write_data(ctx,0x40);
-	ST7701S_write_data(ctx,0x01);
-	ST7701S_write_data(ctx,0x46);
-	ST7701S_write_data(ctx,0x0D);
-	ST7701S_write_data(ctx,0x13);
-	ST7701S_write_data(ctx,0x09);
-	ST7701S_write_data(ctx,0x05);
-	ST7701S_write_data(ctx,0x09);
-	ST7701S_write_data(ctx,0x09);
-	ST7701S_write_data(ctx,0x1B);
-	ST7701S_write_data(ctx,0x07);
-	ST7701S_write_data(ctx,0x15);
-	ST7701S_write_data(ctx,0x12);
-	ST7701S_write_data(ctx,0x4C);
-	ST7701S_write_data(ctx,0x10);
-	ST7701S_write_data(ctx,0xC8);
-	//Negative Voltage Gamma Control
-	ST7701S_write_command(ctx,ST7701S_CMD2_BK0_NVGAMCTRL);
-	ST7701S_write_data(ctx,0x40);
-	ST7701S_write_data(ctx,0x02);
-	ST7701S_write_data(ctx,0x86);
-	ST7701S_write_data(ctx,0x0D);
-	ST7701S_write_data(ctx,0x13);
-	ST7701S_write_data(ctx,0x09);
-	ST7701S_write_data(ctx,0x05);
-	ST7701S_write_data(ctx,0x09);
-	ST7701S_write_data(ctx,0x09);
-	ST7701S_write_data(ctx,0x1F);
-	ST7701S_write_data(ctx,0x07);
-	ST7701S_write_data(ctx,0x15);
-	ST7701S_write_data(ctx,0x12);
-	ST7701S_write_data(ctx,0x15);
-	ST7701S_write_data(ctx,0x19);
-	ST7701S_write_data(ctx,0x08);
-	//command bank1
-	ST7701S_write_command(ctx,ST7701S_CMD2BKX_SEL );
-	ST7701S_write_data(ctx,0x77);
-	ST7701S_write_data(ctx,0x01);
-	ST7701S_write_data(ctx,0x00);
-	ST7701S_write_data(ctx,0x00);
-	ST7701S_write_data(ctx,0x11);
+ST7701S_write_command(ctx,ST7701S_PIXEL_FORMAT);
+ST7701S_write_data(ctx,0x60);/*18bit*/
+//choose command2 BK0
+ST7701S_write_command(ctx,ST7701S_CMD2BKX_SEL );
+ST7701S_write_data(ctx,0x77);
+ST7701S_write_data(ctx,0x01);
+ST7701S_write_data(ctx,0x00);
+ST7701S_write_data(ctx,0x00);
+ST7701S_write_data(ctx,0x10);
+ST7701S_write_command(ctx,ST7701S_CMD2_BK0_LNESET);/*设置480行*/
+ST7701S_write_data(ctx,0x3B);
+ST7701S_write_data(ctx,0x00);
+ST7701S_write_command(ctx,ST7701S_CMD2_BK0_PORCTRL_VBP);//v back front 
+ST7701S_write_data(ctx,0x0E);//vbp=14
+ST7701S_write_data(ctx,0x0A);//vfp=8
+ST7701S_write_command(ctx,ST7701S_CMD2_BK0_INVSET);
+ST7701S_write_data(ctx,0x31);
+ST7701S_write_data(ctx,0x08);/*每行多少像素*/
+/*ST7701S_write_data(ctx,0x88);
+RGB HV mode,VSYNC HSYNC 低电平有效
+DOCLK 时钟下降沿输入数据
+DE=1使能引脚为高
+*/
+ST7701S_write_command(ctx,ST7701S_RGBCTRL_CMD);//RGB 控制
+ST7701S_write_data(ctx,0x83);
+/*HBP=10,HFP=10*/
+ST7701S_write_data(ctx,0x0C);/*设置HBP*/
+ST7701S_write_data(ctx,0x10);//VBP 10
+ST7701S_write_command(ctx,ST7701S_CORLOR_CONTROL);
+ST7701S_write_data(ctx,0x08);
+//Positive Voltage Gamma
+ST7701S_write_command(ctx,ST7701S_CMD2_BK0_PVGAMCTRL);
+ST7701S_write_data(ctx,0x40);
+ST7701S_write_data(ctx,0x01);
+ST7701S_write_data(ctx,0x46);
+ST7701S_write_data(ctx,0x0D);
+ST7701S_write_data(ctx,0x13);
+ST7701S_write_data(ctx,0x09);
+ST7701S_write_data(ctx,0x05);
+ST7701S_write_data(ctx,0x09);
+ST7701S_write_data(ctx,0x09);
+ST7701S_write_data(ctx,0x1B);
+ST7701S_write_data(ctx,0x07);
+ST7701S_write_data(ctx,0x15);
+ST7701S_write_data(ctx,0x12);
+ST7701S_write_data(ctx,0x4C);
+ST7701S_write_data(ctx,0x10);
+ST7701S_write_data(ctx,0xC8);
+//Negative Voltage Gamma Control
+ST7701S_write_command(ctx,ST7701S_CMD2_BK0_NVGAMCTRL);
+ST7701S_write_data(ctx,0x40);
+ST7701S_write_data(ctx,0x02);
+ST7701S_write_data(ctx,0x86);
+ST7701S_write_data(ctx,0x0D);
+ST7701S_write_data(ctx,0x13);
+ST7701S_write_data(ctx,0x09);
+ST7701S_write_data(ctx,0x05);
+ST7701S_write_data(ctx,0x09);
+ST7701S_write_data(ctx,0x09);
+ST7701S_write_data(ctx,0x1F);
+ST7701S_write_data(ctx,0x07);
+ST7701S_write_data(ctx,0x15);
+ST7701S_write_data(ctx,0x12);
+ST7701S_write_data(ctx,0x15);
+ST7701S_write_data(ctx,0x19);
+ST7701S_write_data(ctx,0x08);
+//command bank1
+ST7701S_write_command(ctx,ST7701S_CMD2BKX_SEL );
+ST7701S_write_data(ctx,0x77);
+ST7701S_write_data(ctx,0x01);
+ST7701S_write_data(ctx,0x00);
+ST7701S_write_data(ctx,0x00);
+ST7701S_write_data(ctx,0x11);
 
-	ST7701S_write_command(ctx,ST7701S_CMD2_BK1_VRHS);
-	ST7701S_write_data(ctx,0x4D);/*3.53 + 80*0.0125*/
-	//---Vcom Setting---//
-	ST7701S_write_command(ctx,ST7701S_CMD2_BK1_VCOM);
-	ST7701S_write_data(ctx,0x6F);/*1.4v 原来68*/
-	//---End Vcom Setting---//
-	ST7701S_write_command(ctx,ST7701S_CMD2_BK1_VGHSS);
-	ST7701S_write_data(ctx,0x09);//Gate门高电压15v,原来0x07
-	ST7701S_write_command(ctx,ST7701S_CMD2_BK1_TESTCMD);
-	//ST7701S_write_data(ctx,0x80);//test command
-	ST7701S_write_command(ctx,ST7701S_CMD2_BK1_VGLS);
-	ST7701S_write_data(ctx,0x47);//gate 门低电压-9.51
-	ST7701S_write_command(ctx,ST7701S_CMD2_BK1_PWCTRL1);
-	ST7701S_write_data(ctx,0x8a);
-	ST7701S_write_command(ctx,ST7701S_CMD2_BK1_PWCTRL2);
-	ST7701S_write_data(ctx,0x21);//AVDD 6.6v AVCL -4.6v
-	ST7701S_write_command(ctx,ST7701S_CMD2_BK1_SPD1);
-	ST7701S_write_data(ctx,0x78);//source pre_drive timing setting.
-	ST7701S_write_command(ctx,ST7701S_CMD2_BK1_SPD2);
-	ST7701S_write_data(ctx,0x78);//source pre_drive timing setting
-	ST7701S_write_command(ctx,ST7701S_CMD2_BK1_MIPISET1);
-	ST7701S_write_data(ctx,0x88);//enable eotp report error
-	//---End Power Control Registers Initial ---//
-	mdelay(100);
-	//---GIP Setting---//
-	ST7701S_write_command(ctx,0xE0);
-	ST7701S_write_data(ctx,0x00);
-	ST7701S_write_data(ctx,0x00);
-	ST7701S_write_data(ctx,0x02);
-	ST7701S_write_command(ctx,0xE1);
-	ST7701S_write_data(ctx,0x08);
-	ST7701S_write_data(ctx,0x00);
-	ST7701S_write_data(ctx,0x0A);
-	ST7701S_write_data(ctx,0x00);
-	ST7701S_write_data(ctx,0x07);
-	ST7701S_write_data(ctx,0x00);
-	ST7701S_write_data(ctx,0x09);
-	ST7701S_write_data(ctx,0x00);
-	ST7701S_write_data(ctx,0x00);
-	ST7701S_write_data(ctx,0x33);
-	ST7701S_write_data(ctx,0x33);
-	ST7701S_write_command(ctx,0xE2);
-	ST7701S_write_data(ctx,0x00);
-	ST7701S_write_data(ctx,0x00);
-	ST7701S_write_data(ctx,0x00);
-	ST7701S_write_data(ctx,0x00);
-	ST7701S_write_data(ctx,0x00);
-	ST7701S_write_data(ctx,0x00);
-	ST7701S_write_data(ctx,0x00);
-	ST7701S_write_data(ctx,0x00);
-	ST7701S_write_data(ctx,0x00);
-	ST7701S_write_data(ctx,0x00);
-	ST7701S_write_data(ctx,0x00);
-	ST7701S_write_data(ctx,0x00);
-	ST7701S_write_data(ctx,0x00);
-	ST7701S_write_command(ctx,0xE3);
-	ST7701S_write_data(ctx,0x00);
-	ST7701S_write_data(ctx,0x00);
-	ST7701S_write_data(ctx,0x33);
-	ST7701S_write_data(ctx,0x33);
-	ST7701S_write_command(ctx,0xE4);
-	ST7701S_write_data(ctx,0x44);
-	ST7701S_write_data(ctx,0x44);
+ST7701S_write_command(ctx,ST7701S_CMD2_BK1_VRHS);
+ST7701S_write_data(ctx,0x4D);/*3.53 + 80*0.0125*/
+//-------------------------------------------Vcom Setting---------------------------------------------------//
+ST7701S_write_command(ctx,ST7701S_CMD2_BK1_VCOM);
+ST7701S_write_data(ctx,0x6F);/*1.4v 原来68*/
+//-----------------------------------------End Vcom Setting-----------------------------------------------//
+ST7701S_write_command(ctx,ST7701S_CMD2_BK1_VGHSS);
+ST7701S_write_data(ctx,0x09);//Gate门高电压15v,原来0x07
+ST7701S_write_command(ctx,ST7701S_CMD2_BK1_TESTCMD);
+//ST7701S_write_data(ctx,0x80);//test command
+ST7701S_write_command(ctx,ST7701S_CMD2_BK1_VGLS);
+ST7701S_write_data(ctx,0x47);//gate 门低电压-9.51
+ST7701S_write_command(ctx,ST7701S_CMD2_BK1_PWCTRL1);
+ST7701S_write_data(ctx,0x8a);
+ST7701S_write_command(ctx,ST7701S_CMD2_BK1_PWCTRL2);
+ST7701S_write_data(ctx,0x21);//AVDD 6.6v AVCL -4.6v
+ST7701S_write_command(ctx,ST7701S_CMD2_BK1_SPD1);
+ST7701S_write_data(ctx,0x78);//source pre_drive timing setting.
+ST7701S_write_command(ctx,ST7701S_CMD2_BK1_SPD2);
+ST7701S_write_data(ctx,0x78);//source pre_drive timing setting
+ST7701S_write_command(ctx,ST7701S_CMD2_BK1_MIPISET1);
+ST7701S_write_data(ctx,0x88);//enable eotp report error
+//---------------------------------End Power Control Registers Initial -------------------------------//
+mdelay(100);
+//---------------------------------------------GIP Setting----------------------------------------------------//
+ST7701S_write_command(ctx,0xE0);
+ST7701S_write_data(ctx,0x00);
+ST7701S_write_data(ctx,0x00);
+ST7701S_write_data(ctx,0x02);
+ST7701S_write_command(ctx,0xE1);
+ST7701S_write_data(ctx,0x08);
+ST7701S_write_data(ctx,0x00);
+ST7701S_write_data(ctx,0x0A);
+ST7701S_write_data(ctx,0x00);
+ST7701S_write_data(ctx,0x07);
+ST7701S_write_data(ctx,0x00);
+ST7701S_write_data(ctx,0x09);
+ST7701S_write_data(ctx,0x00);
+ST7701S_write_data(ctx,0x00);
+ST7701S_write_data(ctx,0x33);
+ST7701S_write_data(ctx,0x33);
+ST7701S_write_command(ctx,0xE2);
+ST7701S_write_data(ctx,0x00);
+ST7701S_write_data(ctx,0x00);
+ST7701S_write_data(ctx,0x00);
+ST7701S_write_data(ctx,0x00);
+ST7701S_write_data(ctx,0x00);
+ST7701S_write_data(ctx,0x00);
+ST7701S_write_data(ctx,0x00);
+ST7701S_write_data(ctx,0x00);
+ST7701S_write_data(ctx,0x00);
+ST7701S_write_data(ctx,0x00);
+ST7701S_write_data(ctx,0x00);
+ST7701S_write_data(ctx,0x00);
+ST7701S_write_data(ctx,0x00);
+ST7701S_write_command(ctx,0xE3);
+ST7701S_write_data(ctx,0x00);
+ST7701S_write_data(ctx,0x00);
+ST7701S_write_data(ctx,0x33);
+ST7701S_write_data(ctx,0x33);
+ST7701S_write_command(ctx,0xE4);
+ST7701S_write_data(ctx,0x44);
+ST7701S_write_data(ctx,0x44);
 
 ST7701S_write_command(ctx,0xE5);
 ST7701S_write_data(ctx,0x0E);
@@ -551,6 +558,6 @@ static struct spi_driver ST7701S_driver = {
 };
 module_spi_driver(ST7701S_driver);
 
-MODULE_AUTHOR("miller.wu@myirtech.com");
+MODULE_AUTHOR("Maxime Ripard <maxime.ripard@free-electrons.com>");
 MODULE_DESCRIPTION("Sitronix ST7701S SPI_LCD Driver");
 MODULE_LICENSE("GPL v2");
