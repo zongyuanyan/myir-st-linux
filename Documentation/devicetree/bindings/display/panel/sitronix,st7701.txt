@@ -28,3 +28,37 @@ panel@0 {
 	reset-gpios = <&pio 3 24 GPIO_ACTIVE_HIGH>; /* LCD-RST: PD24 */
 	backlight = <&backlight>;
 };
+
+
+/*only for myir myd-ya157c-v2*/
+&spi1 {
+	panel@0 {
+		compatible = "sitronix,ST7701S";
+		spi-max-frequency = <20000000>;
+		reg = <0>;
+		pinctrl-names = "default", "sleep";
+		pinctrl-0 = <&ltdc_pins_a>;
+		pinctrl-1 = <&ltdc_pins_sleep_a>;
+		reset-gpio = <&gpioe 12 GPIO_ACTIVE_HIGH>;
+		status = "okay";
+		 port {
+			panel_in: endpoint {
+				 remote-endpoint = <&ltdc_ep0_out>;
+				};
+			};
+      };
+};
+
+&ltdc {
+        status = "okay";
+
+        port {
+                #address-cells = <1>;
+                #size-cells = <0>;
+
+                ltdc_ep0_out: endpoint@0 {
+                                reg = <0>;
+                                remote-endpoint = <&panel_in>;
+                                };
+           };
+};

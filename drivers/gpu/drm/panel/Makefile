@@ -39,3 +39,4 @@ obj-$(CONFIG_DRM_PANEL_TPO_TD043MTEA1) += panel-tpo-td043mtea1.o
 obj-$(CONFIG_DRM_PANEL_TPO_TPG110) += panel-tpo-tpg110.o
 obj-$(CONFIG_DRM_PANEL_TRULY_NT35597_WQXGA) += panel-truly-nt35597.o
 obj-$(CONFIG_DRM_PANEL_MYIR070TFT) += panel-myir070tft.o
+obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7701s) +=panel-sitronix-st7701s.o
