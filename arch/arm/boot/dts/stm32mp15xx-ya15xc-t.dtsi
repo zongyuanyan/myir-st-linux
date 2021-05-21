@@ -312,7 +312,7 @@
 	rtc1: rtc1@32 {
 		compatible = "epson,rx8025";
 		reg = <0x32>;
-		status = "okay";
+		status = "disabled";
 	};
 
 
