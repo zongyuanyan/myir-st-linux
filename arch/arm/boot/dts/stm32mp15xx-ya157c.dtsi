@@ -343,12 +343,12 @@
 	status = "okay";
 };
 
-
+/*
 &pwr_regulators {
 	vdd-supply = <&vdd>;
 //	vdd_3v3_usbfs-supply = <&vdd_usb>;
 };
-
+*/
 
 &rng1 {
 	status = "okay";
