@@ -606,7 +606,7 @@ struct phy_device *phy_device_create(struct mii_bus *bus, int addr, u32 phy_id,
 	dev->pause = 0;
 	dev->asym_pause = 0;
 	dev->link = 0;
-	dev->interface = PHY_INTERFACE_MODE_GMII;   //change PHY_INTERFACE_MODE_GMII to PHY_INTERFACE_MODE_RGMII
+	dev->interface = PHY_INTERFACE_MODE_GMII;   
 
 	dev->autoneg = AUTONEG_ENABLE;
 
@@ -1701,11 +1701,11 @@ static int genphy_config_advert(struct phy_device *phydev)
 	 * 1000Mbits/sec capable PHYs shall have the BMSR_ESTATEN bit set to a
 	 * logical 1.
 	 */
-	if (!(bmsr & BMSR_ESTATEN))   //0x0100 扩展寄存器
+	if (!(bmsr & BMSR_ESTATEN))   //0x0100 
 		return changed;
 	
 	#if 0        //belongs to YT8511
-	reg4_pause = phy_read(phydev,0x4);   //关闭暂停对称和流控
+	reg4_pause = phy_read(phydev,0x4);   //turn off pause symmetry and flow control
 	printk("reg4_pause = %x\n",reg4_pause);  
 	reg4_pause &= ~(3 << 10);
 	printk("reg4_pause = %x\n",reg4_pause); 
@@ -1718,16 +1718,16 @@ static int genphy_config_advert(struct phy_device *phydev)
 	//speed_reg &= ~(1 << 5); 
 	//speed_reg |= (7 << 2); 
 	speed_reg |= (1 << 4); 
-	printk("speed_reg = %x\n",speed_reg);  // 080c  关闭速度降格
+	printk("speed_reg = %x\n",speed_reg);  // 080c  shutdown speed reduced
 	phy_write(phydev,0x14,speed_reg);
 	rett = phy_read(phydev,0x14); 
 	printk("speed_reg = %x\n",rett);   
 	#endif
 	
-	adv = linkmode_adv_to_mii_ctrl1000_t(phydev->advertising);   //配置自动协商广告  0x0200  ,寄存器9
+	adv = linkmode_adv_to_mii_ctrl1000_t(phydev->advertising);   //0x0200 
 		//printk("adv = %x\n",adv);
 
-	err = phy_modify_changed(phydev, MII_CTRL1000,        //修改寄存器值
+	err = phy_modify_changed(phydev, MII_CTRL1000,       
 				 ADVERTISE_1000FULL | ADVERTISE_1000HALF,
 				 adv);	
 
@@ -1840,7 +1840,6 @@ int __genphy_config_aneg(struct phy_device *phydev, bool changed)
 
 	if (genphy_config_eee_advert(phydev))
 	{
-		printk("bbbbbb\n");
 		changed = true;
 	}
 
@@ -1867,7 +1866,6 @@ int __genphy_config_aneg(struct phy_device *phydev, bool changed)
 		 * begin with?  Or maybe phy was isolated?
 		 */	
 		 ctl = phy_read(phydev, MII_BMCR);
-		// printk("MII_BMCR0 = %x\n",ctl);   //1140  add
 
 		if (ctl < 0)
 			return ctl;
@@ -1881,7 +1879,7 @@ int __genphy_config_aneg(struct phy_device *phydev, bool changed)
 	 * than we were before.
 	 */
 	// return changed ? genphy_restart_aneg(phydev) : 0;     //delete
-	//genphy_restart_aneg(phydev);   //直接重启协商    add
+	//genphy_restart_aneg(phydev);  
 
 	if(err > 0)
 	{
@@ -2006,7 +2004,7 @@ int genphy_read_lpa(struct phy_device *phydev)
 		}
 	
 		//add as follow
-		lpa = phy_read(phydev, MII_LPA);  //0x05	/* Link partner ability reg    */  //c5e1  add
+		lpa = phy_read(phydev, MII_LPA);  //0x05	
 		if (lpa < 0)
 			return lpa;
 
@@ -2048,8 +2046,8 @@ int genphy_read_status(struct phy_device *phydev)
 	if (phydev->autoneg == AUTONEG_ENABLE && old_link && phydev->link)
 		return 0;
 
-	phydev->speed = SPEED_UNKNOWN;    //-1  SPEED_UNKNOWN
-	phydev->duplex = DUPLEX_UNKNOWN;  //0xff  DUPLEX_UNKNOWN
+	phydev->speed = SPEED_UNKNOWN;    
+	phydev->duplex = DUPLEX_UNKNOWN;  
 	phydev->pause = 0;
 	phydev->asym_pause = 0;
 
@@ -2058,9 +2056,9 @@ int genphy_read_status(struct phy_device *phydev)
 		return err;
 
 	if (phydev->autoneg == AUTONEG_ENABLE && phydev->autoneg_complete) {
-		phy_resolve_aneg_linkmode(phydev);  //解析广告
+		phy_resolve_aneg_linkmode(phydev);  
 
-		lpagb = phy_read(phydev, MII_STAT1000);   //0
+		lpagb = phy_read(phydev, MII_STAT1000);  
 
 	} else if (phydev->autoneg == AUTONEG_DISABLE) {
 		int bmcr = phy_read(phydev, MII_BMCR);
@@ -2152,7 +2150,7 @@ int genphy_read_abilities(struct phy_device *phydev)
 			 val & BMSR_10HALF);
 
 	if (val & BMSR_ESTATEN) {       //0x0100
-		val = phy_read(phydev, MII_ESTATUS);  //0x0f	/* Extended Status 支持千兆全双工         */
+		val = phy_read(phydev, MII_ESTATUS);  //0x0f	
 		if (val < 0)
 			return val;
 
