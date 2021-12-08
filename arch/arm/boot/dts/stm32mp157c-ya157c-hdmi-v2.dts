@@ -12,28 +12,36 @@
 / {
     model = "MYIR YA157C v2 www.myir-tech.com";
     compatible = "myir,stm32mp157c-ya157c-v2", "st,stm32mp157";
-/*
+
 	sound {
         compatible = "audio-graph-card";
-        label = "STM32MP1-DK";
-        routing =
-                "Playback" , "MCLK",
-                "Capture" , "MCLK",
-                "MICL" , "Mic Bias";
+        label = "STM32MP1-myir";
+        //routing =
+        //        "Playback" , "MCLK",
+        //        "Capture" , "MCLK",
+         //       "MICL" , "Mic Bias";
         dais = <&i2s2_port>;
         status = "okay";
     };
-*/
+
 };
 
 &i2c2 {
+		
+	//pinctrl-names = "default", "sleep";
+	//pinctrl-0 = <&i2c2_pins_a>;
+	//pinctrl-1 = <&i2c2_pins_sleep_a>;
+	//i2c-scl-rising-time-ns = <100>;
+	//i2c-scl-falling-time-ns = <7>;
+	//status = "okay";
+
 	hdmi-transmitter@39 {
 		compatible = "sil,sii9022";
 		reg = <0x39>;
 		reset-gpios = <&gpioc 7 GPIO_ACTIVE_LOW>;
 		interrupts = <10 IRQ_TYPE_EDGE_FALLING>;
 		interrupt-parent = <&gpioa>;
-		//#sound-dai-cells = <0>;
+		#sound-dai-cells = <1>;
 		status = "okay";
 
 		ports {
@@ -46,20 +54,20 @@
 					remote-endpoint = <&ltdc_ep0_out>;
 				};
 			};
-/*
+
 			port@3 {
 				reg = <3>;
 				sii9022_tx_endpoint: endpoint {
 					remote-endpoint = <&i2s2_endpoint>;
 				};
-			};*/
+			};
 		};
 	};
 
 
 };
 
-/*
+
 &i2s2 {
 	clocks = <&rcc SPI2>, <&rcc SPI2_K>, <&rcc PLL3_Q>, <&rcc PLL3_R>;
 	clock-names = "pclk", "i2sclk", "x8k", "x11k";
@@ -76,7 +84,7 @@
 		};
 	};
 };
-*/
+
 
 /* test HDMI*/
 &ltdc {
