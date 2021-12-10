@@ -467,9 +467,12 @@
 
 /*rs485*/
 &uart5 {
-       pinctrl-names = "default", "sleep";
+       pinctrl-names = "default", "sleep","idle";
         pinctrl-0 = <&uart5_pins_a>;
         pinctrl-1 = <&uart5_sleep_pins_a>;
+	pinctrl-2 = <&uart5_idle_pins_a>;
+	/delete-property/dmas;
+	/delete-property/dma-names;
 
         status = "okay";
 };
