@@ -861,6 +861,7 @@ int yt8511_config_out_125m(struct mii_bus *bus, int phy_id)
 
 	val |= (3 << 1);
 	val |= (1 << 0);
+	val |= (1 << 5); //tx_delay
 
 	/*  config rx_delay
 	debug = ytphy_mii_rd_ext(bus,phy_id,0x1e);
